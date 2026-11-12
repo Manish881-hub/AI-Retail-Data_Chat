@@ -119,7 +119,7 @@ def build_plan(name: str, view: pd.DataFrame, dayfirst: bool, header_map: dict):
             continue
         vals = view[c][~nm[c]].astype(str).str.strip().str.replace(r"\s+", " ", regex=True)
         d = vals.nunique()
-        if d == 0 or d > 200 or d / max(len(vals), 1) > 0.5:
+        if d == 0 or d > 200:
             continue
         k = vals.str.lower().str.replace(r"[^a-z0-9]", "", regex=True)
         multi = vals.groupby(k).nunique()

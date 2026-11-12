@@ -1,0 +1,201 @@
+customer_id,segment,signup_date,email
+C0001,NEW,10/01/2024,user1@example.com
+C0002,loyal ,07/01/2024,user2@example.com
+C0003,New,05/05/2024,user3@example.com
+C0004,At Risk,11/04/2024,user4@example.com
+C0005,NEW,02/10/2024,user5@example.com
+C0006,NEW,09/03/2024,user6@example.com
+C0007,At Risk,11/12/2024,user7@example.com
+C0008,NEW,10/07/2024,user8@example.com
+C0009,loyal ,06/12/2024,user9@example.com
+C0010,NEW,08/03/2024,user10@example.com
+C0011,New,05/12/2024,user11@example.com
+C0012,NEW,10/11/2024,user12@example.com
+C0013,loyal ,03/01/2024,user13@example.com
+C0014,At Risk,12/09/2024,user14@example.com
+C0015,loyal ,11/07/2024,user15@example.com
+C0016,At Risk,12/12/2024,user16@example.com
+C0017,Loyal,09/03/2024,user17@example.com
+C0018,At Risk,09/09/2024,user18@example.com
+C0019,At Risk,10/01/2024,user19@example.com
+C0020,New,11/10/2024,user20@example.com
+C0021,Loyal,12/11/2024,user21@example.com
+C0022,loyal ,12/11/2024,user22@example.com
+C0023,At Risk,04/02/2024,user23@example.com
+C0024,Loyal,01/01/2024,user24@example.com
+C0025,loyal ,03/11/2024,user25@example.com
+C0026,New,06/02/2024,user26@example.com
+C0027,Loyal,07/08/2024,user27@example.com
+C0028,loyal ,09/01/2024,user28@example.com
+C0029,New,11/01/2024,user29@example.com
+C0030,loyal ,11/09/2024,user30@example.com
+C0031,New,11/04/2024,user31@example.com
+C0032,loyal ,08/05/2024,user32@example.com
+C0033,At Risk,01/08/2024,user33@example.com
+C0034,loyal ,02/12/2024,user34@example.com
+C0035,Loyal,09/09/2024,user35@example.com
+C0036,At Risk,02/11/2024,user36@example.com
+C0037,At Risk,09/02/2024,user37@example.com
+C0038,loyal ,12/12/2024,user38@example.com
+C0039,loyal ,08/05/2024,user39@example.com
+C0040,loyal ,02/05/2024,user40@example.com
+C0041,At Risk,04/12/2024,user41@example.com
+C0042,NEW,04/04/2024,user42@example.com
+C0043,At Risk,12/11/2024,user43@example.com
+C0044,New,08/08/2024,user44@example.com
+C0045,At Risk,07/02/2024,user45@example.com
+C0046,loyal ,08/11/2024,user46@example.com
+C0047,New,05/01/2024,user47@example.com
+C0048,New,10/11/2024,user48@example.com
+C0049,Loyal,11/04/2024,user49@example.com
+C0050,New,02/10/2024,user50@example.com
+C0051,Loyal,03/06/2024,user51@example.com
+C0052,New,05/11/2024,user52@example.com
+C0053,NEW,12/12/2024,user53@example.com
+C0054,At Risk,05/10/2024,user54@example.com
+C0055,At Risk,10/03/2024,user55@example.com
+C0056,Loyal,01/08/2024,user56@example.com
+C0057,At Risk,01/08/2024,user57@example.com
+C0058,New,05/11/2024,user58@example.com
+C0059,NEW,02/12/2024,user59@example.com
+C0060,NEW,04/11/2024,user60@example.com
+C0061,New,08/05/2024,user61@example.com
+C0062,NEW,12/09/2024,user62@example.com
+C0063,Loyal,05/08/2024,user63@example.com
+C0064,Loyal,08/08/2024,user64@example.com
+C0065,loyal ,02/09/2024,user65@example.com
+C0066,Loyal,04/05/2024,user66@example.com
+C0067,Loyal,02/08/2024,user67@example.com
+C0068,New,01/05/2024,user68@example.com
+C0069,New,08/02/2024,user69@example.com
+C0070,Loyal,09/08/2024,user70@example.com
+C0071,loyal ,05/07/2024,user71@example.com
+C0072,New,04/04/2024,user72@example.com
+C0073,loyal ,02/10/2024,user73@example.com
+C0074,At Risk,02/03/2024,user74@example.com
+C0075,New,12/09/2024,user75@example.com
+C0076,At Risk,05/06/2024,user76@example.com
+C0077,loyal ,03/10/2024,user77@example.com
+C0078,NEW,11/09/2024,user78@example.com
+C0079,NEW,05/02/2024,user79@example.com
+C0080,NEW,12/06/2024,user80@example.com
+C0081,At Risk,04/08/2024,user81@example.com
+C0082,New,08/07/2024,user82@example.com
+C0083,Loyal,01/03/2024,user83@example.com
+C0084,New,01/08/2024,user84@example.com
+C0085,Loyal,11/08/2024,user85@example.com
+C0086,loyal ,07/05/2024,user86@example.com
+C0087,At Risk,12/03/2024,user87@example.com
+C0088,Loyal,07/06/2024,user88@example.com
+C0089,New,07/06/2024,user89@example.com
+C0090,Loyal,02/06/2024,user90@example.com
+C0091,Loyal,01/06/2024,user91@example.com
+C0092,New,06/07/2024,user92@example.com
+C0093,Loyal,02/04/2024,user93@example.com
+C0094,NEW,12/01/2024,user94@example.com
+C0095,loyal ,12/05/2024,user95@example.com
+C0096,Loyal,05/06/2024,user96@example.com
+C0097,New,02/07/2024,user97@example.com
+C0098,Loyal,07/10/2024,user98@example.com
+C0099,At Risk,02/06/2024,user99@example.com
+C0100,Loyal,07/05/2024,user100@example.com
+C0101,New,01/05/2024,user101@example.com
+C0102,NEW,02/01/2024,user102@example.com
+C0103,At Risk,11/05/2024,user103@example.com
+C0104,New,11/03/2024,user104@example.com
+C0105,NEW,04/05/2024,user105@example.com
+C0106,loyal ,07/09/2024,user106@example.com
+C0107,Loyal,06/04/2024,user107@example.com
+C0108,NEW,06/07/2024,user108@example.com
+C0109,loyal ,01/11/2024,user109@example.com
+C0110,Loyal,07/09/2024,user110@example.com
+C0111,loyal ,09/04/2024,user111@example.com
+C0112,New,12/02/2024,user112@example.com
+C0113,Loyal,01/12/2024,user113@example.com
+C0114,loyal ,07/08/2024,user114@example.com
+C0115,loyal ,10/03/2024,user115@example.com
+C0116,New,11/05/2024,user116@example.com
+C0117,New,08/01/2024,user117@example.com
+C0118,NEW,09/03/2024,user118@example.com
+C0119,loyal ,03/08/2024,user119@example.com
+C0120,New,07/06/2024,user120@example.com
+C0121,At Risk,05/05/2024,user121@example.com
+C0122,NEW,05/12/2024,user122@example.com
+C0123,loyal ,12/11/2024,user123@example.com
+C0124,New,05/07/2024,user124@example.com
+C0125,New,11/04/2024,user125@example.com
+C0126,Loyal,05/08/2024,user126@example.com
+C0127,New,09/11/2024,user127@example.com
+C0128,Loyal,07/02/2024,user128@example.com
+C0129,Loyal,03/11/2024,user129@example.com
+C0130,Loyal,03/02/2024,user130@example.com
+C0131,NEW,04/09/2024,user131@example.com
+C0132,NEW,08/09/2024,user132@example.com
+C0133,loyal ,04/08/2024,user133@example.com
+C0134,NEW,06/08/2024,user134@example.com
+C0135,At Risk,07/03/2024,user135@example.com
+C0136,loyal ,09/04/2024,user136@example.com
+C0137,At Risk,04/02/2024,user137@example.com
+C0138,Loyal,03/06/2024,user138@example.com
+C0139,At Risk,09/02/2024,user139@example.com
+C0140,At Risk,06/04/2024,user140@example.com
+C0141,NEW,06/05/2024,user141@example.com
+C0142,At Risk,10/04/2024,user142@example.com
+C0143,NEW,01/12/2024,user143@example.com
+C0144,New,07/07/2024,user144@example.com
+C0145,loyal ,07/12/2024,user145@example.com
+C0146,loyal ,09/04/2024,user146@example.com
+C0147,New,07/05/2024,user147@example.com
+C0148,loyal ,06/01/2024,user148@example.com
+C0149,loyal ,08/05/2024,user149@example.com
+C0150,At Risk,10/06/2024,user150@example.com
+C0151,New,03/11/2024,user151@example.com
+C0152,Loyal,09/09/2024,user152@example.com
+C0153,loyal ,11/04/2024,user153@example.com
+C0154,Loyal,02/05/2024,user154@example.com
+C0155,Loyal,04/07/2024,user155@example.com
+C0156,New,07/11/2024,user156@example.com
+C0157,At Risk,08/07/2024,user157@example.com
+C0158,loyal ,05/01/2024,user158@example.com
+C0159,Loyal,03/01/2024,user159@example.com
+C0160,Loyal,07/12/2024,user160@example.com
+C0161,At Risk,08/10/2024,user161@example.com
+C0162,NEW,08/01/2024,user162@example.com
+C0163,New,02/07/2024,user163@example.com
+C0164,NEW,09/08/2024,user164@example.com
+C0165,loyal ,08/04/2024,user165@example.com
+C0166,New,02/04/2024,user166@example.com
+C0167,Loyal,03/03/2024,user167@example.com
+C0168,At Risk,09/11/2024,user168@example.com
+C0169,loyal ,02/12/2024,user169@example.com
+C0170,loyal ,12/11/2024,user170@example.com
+C0171,New,08/02/2024,user171@example.com
+C0172,At Risk,09/01/2024,user172@example.com
+C0173,Loyal,01/03/2024,user173@example.com
+C0174,New,04/10/2024,user174@example.com
+C0175,New,01/11/2024,user175@example.com
+C0176,New,12/05/2024,user176@example.com
+C0177,NEW,03/11/2024,user177@example.com
+C0178,New,05/09/2024,user178@example.com
+C0179,loyal ,11/07/2024,user179@example.com
+C0180,Loyal,12/02/2024,user180@example.com
+C0181,New,02/02/2024,user181@example.com
+C0182,loyal ,05/09/2024,user182@example.com
+C0183,New,10/04/2024,user183@example.com
+C0184,loyal ,07/05/2024,user184@example.com
+C0185,Loyal,04/10/2024,user185@example.com
+C0186,New,01/01/2024,user186@example.com
+C0187,At Risk,09/05/2024,user187@example.com
+C0188,Loyal,08/05/2024,user188@example.com
+C0189,At Risk,06/11/2024,user189@example.com
+C0190,New,04/08/2024,user190@example.com
+C0191,NEW,09/04/2024,user191@example.com
+C0192,loyal ,09/04/2024,user192@example.com
+C0193,loyal ,01/07/2024,user193@example.com
+C0194,NEW,12/11/2024,user194@example.com
+C0195,Loyal,05/01/2024,user195@example.com
+C0196,Loyal,01/04/2024,user196@example.com
+C0197,New,08/11/2024,user197@example.com
+C0198,Loyal,11/07/2024,user198@example.com
+C0199,loyal ,02/05/2024,user199@example.com
+C0200,At Risk,04/11/2024,user200@example.com
