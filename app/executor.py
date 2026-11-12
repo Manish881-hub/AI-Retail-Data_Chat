@@ -43,6 +43,15 @@ def validate_plan(plan: Plan, schemas: dict, datasets: dict, s: Settings) -> Non
         return
     if plan.dataset not in schemas:
         raise PlanRejected([f"unknown dataset {plan.dataset!r}; available: {sorted(schemas)}"])
+    if plan.intent == "retail_score":
+        for f in plan.filters:
+            if f.field not in ("region", "category_norm", "brand") or f.op != "eq" or isinstance(f.value, list):
+                errs.append(f"retail_score supports only eq filters on region/category_norm/brand, got {f.field} {f.op}")
+        if plan.limit is not None and not (1 <= plan.limit <= s.max_limit):
+            errs.append(f"limit must be 1..{s.max_limit}")
+        if errs:
+            raise PlanRejected(errs)
+        return
     if plan.limit is not None and not (1 <= plan.limit <= s.max_limit):
         errs.append(f"limit must be 1..{s.max_limit}")
     if len(plan.joins) > s.max_joins:
