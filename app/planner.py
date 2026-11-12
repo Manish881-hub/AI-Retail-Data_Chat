@@ -220,7 +220,8 @@ def rule_plan(question: str, schemas: dict, values: dict, roles: dict, prior: Op
         if follow:  # filter-only follow-up ("only stores in the West region")
             if filters:
                 return _finish(Plan(intent="aggregate", inherit_context=True, filters=filters), prior, schemas, roles, follow)
-        if re.search(r"\b(distinct|unique|different|list|what are the|which)\b", q) and group_cols:
+        vague = desc or asc or re.search(r"\b(performing|performance|popular|good|bad|doing)\b", q)
+        if not vague and re.search(r"\b(distinct|unique|different|list|what are the|which)\b", q) and group_cols:
             ds, col = _find_col(schemas, [group_cols[0]])
             return _finish(Plan(intent="distinct", dataset=ds, select=[col], filters=filters, inherit_context=follow), prior, schemas, roles, follow)
         if re.search(r"\b(describe|summary statistics|summari[sz]e|distribution|statistics|stats)\b", q):
@@ -228,7 +229,7 @@ def rule_plan(question: str, schemas: dict, values: dict, roles: dict, prior: Op
             if nums:
                 return _finish(Plan(intent="describe", dataset=nums[0][0], select=[nums[0][1]], filters=filters, inherit_context=follow), prior, schemas, roles, follow)
         opts = ", ".join(e[0].replace("_", " ") for e in CATALOG if e[2] in roles and e[0] not in ("product_count", "store_count", "customer_count"))
-        if desc or asc or re.search(r"\b(performing|performance|popular|good|bad|doing)\b", q):
+        if vague:
             return Plan(intent="clarify", message=f"By which measure do you mean? For example: {opts}.")
         return Plan(intent="clarify", message=f"I couldn't map that to a metric or column. Try asking about {opts}, optionally by category, region, store, brand, segment or month.")
 

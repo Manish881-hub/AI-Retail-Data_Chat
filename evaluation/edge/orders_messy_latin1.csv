@@ -1,0 +1,7 @@
+order_id,sku,store_id,order_date,qty,unit_price,returned,notes
+O1,TEE-1,S1,04/05/2025,2,10.5,no,
+O2,tee 1,S1,06/07/2025,1,12,yes,
+O2,tee 1,S2,06/07/2025,1,12,yes,
+O3,TEE-1,S1,08/09/2025,-1,12,no,
+O4,TEE-1,S1,09/10/2025,3,café price,no,
+O5,TEE-1,S1,10/11/2025,2,9,no,,EXTRA,FIELDS
