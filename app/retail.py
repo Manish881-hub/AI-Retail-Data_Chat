@@ -156,7 +156,7 @@ def product_scores(orders: pd.DataFrame, products: pd.DataFrame, inventory: pd.D
         score = sum(WEIGHTS[k] * comp[k] for k in comp) / wsum * 100
         rows.append({"sku": sku, "product_name": r.get("product_name"), "category": r.get("category_norm", r.get("category")),
                      "score": round(float(score), 2), "stockout_risk": bool(facts.get("stock", 1) == 0 and facts.get("units_per_day", 0) > 0),
-                     "factors": {k: round(WEIGHTS[k] * comp[k] / wsum, 2) for k in comp},
+                     "factors": {k: round(100 * WEIGHTS[k] * comp[k] / wsum, 2) for k in comp},
                      "signals": facts, "missing_evidence": missing})
     rows.sort(key=lambda x: (-x["score"], str(x["sku"])))
     return {"weights": WEIGHTS, "window_days": days, "rows": rows}
