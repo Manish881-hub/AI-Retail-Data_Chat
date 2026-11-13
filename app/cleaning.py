@@ -11,8 +11,8 @@ import numpy as np
 import pandas as pd
 
 from . import guard
-from .cleaning_utils import (BOOL_FALSE, BOOL_NAMES, BOOL_TRUE, NULL_TOKENS, is_id_like, kind_of, null_mask,
-                             parse_dates, parse_numeric, serialize_df, snake, to_int_if_integral)
+from .cleaning_utils import (BOOL_FALSE, BOOL_NAMES, BOOL_TRUE, NULL_TOKENS, canonical_spelling, is_id_like, kind_of,
+                             null_mask, parse_dates, parse_numeric, serialize_df, snake, to_int_if_integral)
 from .retail import UNCATEGORIZED, normalize_categories
 
 PRIMARY_KEYS = {"products": ["sku"], "customers": ["customer_id"], "stores": ["store_id"],
@@ -265,8 +265,7 @@ def act_case_variants(df, step, ctx):
     k = clean.str.lower().str.replace(r"[^a-z0-9]", "", regex=True)
     canon = {}
     for key, grp in clean.groupby(k):
-        vc = grp.value_counts()
-        canon[key] = sorted(vc[vc == vc.max()].index)[0]
+        canon[key] = canonical_spelling(grp.value_counts())
     new = s.copy()
     new[nn] = k.map(canon)
     ev = {"cells_changed": _chg(s, new)}

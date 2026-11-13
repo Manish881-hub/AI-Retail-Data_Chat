@@ -6,6 +6,8 @@ import re
 import numpy as np
 import pandas as pd
 
+from .cleaning_utils import canonical_spelling
+
 ALIASES = {
     "T-Shirts": {"tshirt", "tshirts", "tee", "tees", "teeshirt", "teeshirts"},
     "Jeans": {"jean", "jeans", "denim", "denims"},
@@ -32,8 +34,7 @@ def normalize_categories(series: pd.Series, existing_norm: pd.Series | None = No
     spell = {}
     for k, grp in s[keys != ""].groupby(keys[keys != ""]):
         vc = grp.str.strip().str.replace(r"\s+", " ", regex=True).value_counts()
-        top = sorted(vc[vc == vc.max()].index)[0]
-        spell[k] = top
+        spell[k] = canonical_spelling(vc)
     counts = keys[keys != ""].value_counts().to_dict()
     labels, conf = {}, {}
     fuzzy_pool = [k for k in spell if k not in _ALIAS_KEY and k not in UNRESOLVED_KEYS]

@@ -43,6 +43,17 @@ def to_int_if_integral(x: pd.Series) -> pd.Series:
     return x
 
 
+def canonical_spelling(counts: pd.Series) -> str:
+    """The spelling that survives variant collapsing: most frequent, then Title Case, then alphabetical.
+
+    A plain alphabetical tie-break is wrong here: in ASCII uppercase sorts first, so a 1-1 tie
+    between 'East' and 'EAST' silently picks 'EAST' and the cleaned data looks sloppy.
+    """
+    top = counts[counts == counts.max()].index
+    titled = [v for v in top if v == v.title()]
+    return sorted(titled)[0] if titled else sorted(top)[0]
+
+
 def parse_dates(s: pd.Series, dayfirst: bool):
     """Returns (datetime series, info). Never guesses silently:
     - ISO dates parse exactly.

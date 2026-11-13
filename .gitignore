@@ -3,5 +3,6 @@ __pycache__/
 .env
 data_store/
 evaluation_output/
+results.json
 .pytest_cache/
 .venv/

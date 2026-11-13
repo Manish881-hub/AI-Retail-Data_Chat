@@ -155,3 +155,42 @@ def test_retail_score_is_auditable_and_reports_missing_evidence(env):
     assert any("margin" in m for m in sf["JEA-1"]["missing_evidence"])            # cost is blank in the data
     assert abs(sum(sf["TEE-1"]["factors"].values()) - next(r["priority_score"] for r in t["answer"]["rows"] if r["sku"] == "TEE-1")) < 0.05
     assert next(r for r in t["answer"]["rows"] if r["sku"] == "TEE-1")["stockout_risk"] is False    # stock is summed across stores (0+10)
+
+
+# ---------------- brief-required question kinds: distinct values + descriptive statistics
+@pytest.mark.parametrize("q", ["what categories are there?", "list all categories", "unique segment values"])
+def test_distinct_value_questions_return_the_values_not_a_clarification(env, q):
+    t = env["svc"].ask(env["rid"], "alice", None, q)
+    assert t["status"] == "ok", t["answer"]["text"]
+    assert t["plan"]["intent"] == "distinct"
+    assert t["answer"]["rows"] and t["answer"]["evidence"]["result_row_count"] >= 1
+
+
+@pytest.mark.parametrize("q,col", [("summary statistics for unit_price", "unit_price"),
+                                   ("describe unit_price", "unit_price"),
+                                   ("describe revenue", "revenue"),
+                                   ("what is the distribution of qty", "qty")])
+def test_descriptive_statistics_questions_describe_the_column(env, q, col):
+    t = env["svc"].ask(env["rid"], "alice", None, q)
+    assert t["status"] == "ok", t["answer"]["text"]
+    assert t["plan"]["intent"] == "describe" and t["plan"]["select"] == [col]
+    assert {"count", "mean", "median", "min", "max"} <= set(t["answer"]["rows"][0])
+
+
+def test_grouping_dimension_missing_from_loaded_data_is_refused_not_silently_dropped(make_env):
+    from conftest import FILES
+    e = make_env(files={k: FILES[k] for k in ("orders", "inventory")})     # no products => no `category`
+    t = e["svc"].ask(e["rid"], "alice", None, "total revenue by category")
+    assert t["status"] == "unanswerable", t
+    assert "category" in t["answer"]["text"]
+    assert not t["answer"].get("rows"), "must not answer with an ungrouped global total"
+
+
+def test_missing_join_key_between_datasets_is_refused(make_env):
+    from conftest import FILES
+    # products and customers are both loaded but share no join key (no edge between them, no orders to bridge)
+    e = make_env(files={k: FILES[k] for k in ("products", "customers")})
+    t = e["svc"].ask(e["rid"], "alice", None, "average price by segment")
+    assert t["status"] == "unanswerable", t
+    assert "no join key" in t["answer"]["text"]
+    assert not t["answer"].get("rows")

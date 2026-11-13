@@ -160,6 +160,37 @@ def _find_col(schemas, cands, prefer=None):
     return None, None
 
 
+def _name_pat(col: str) -> str:
+    """Column name as a regex that also matches the name written with spaces ('unit price' == 'unit_price')."""
+    return r"\b" + r"[\s_]+".join(re.escape(p) for p in col.split("_") if p) + r"\b"
+
+
+# cues for the two question kinds the brief lists explicitly: distinct values and descriptive statistics
+DISTINCT_CUE = re.compile(r"\b(distinct|unique|different|list|which|what\s+are|are\s+there|values?|available|options)\b")
+STATS_CUE = re.compile(r"\b(describe|summary\s+statistics|summari[sz]e|distribution|statistics|stats|spread|variability)\b")
+
+
+def _named_dims(q: str, schemas: dict) -> list:
+    """Dimension columns the question names anywhere (not only after 'by ...'), in DIMS order, deduped."""
+    out = []
+    for _, syns, cands in DIMS:
+        if any(re.search(rf"\b{re.escape(s)}\b", q) for s in syns):
+            _, col = _find_col(schemas, cands)
+            if col and col not in out:
+                out.append(col)
+    return out
+
+
+def _named_numeric_cols(q: str, schemas: dict) -> list:
+    """(dataset, column) for numeric columns the question names, space/underscore tolerant, deterministic order."""
+    out = []
+    for d in sorted(schemas):
+        for c, kind in schemas[d].items():
+            if kind == "num" and re.search(_name_pat(c), q):
+                out.append((d, c))
+    return out
+
+
 def rule_plan(question: str, schemas: dict, values: dict, roles: dict, prior: Optional[Plan]) -> Plan:
     q = " " + re.sub(r"\s+", " ", question.lower().strip().rstrip("?.!")) + " "
     allcols = {c for cols in schemas.values() for c in cols}
@@ -196,8 +227,15 @@ def rule_plan(question: str, schemas: dict, values: dict, roles: dict, prior: Op
         sf = [f for f in filters if f.field in ("region", "category_norm", "brand") and f.op == "eq"]
         return _finish(Plan(intent="retail_score", dataset=roles["orders"], filters=sf, limit=n or 10, inherit_context=follow), prior, schemas, roles, follow)
 
+    if STATS_CUE.search(q):  # "describe revenue", "summary statistics for unit_price", "distribution of qty"
+        num_cols = _named_numeric_cols(q, schemas)
+        if num_cols:
+            ds, col = num_cols[0]
+            return _finish(Plan(intent="describe", dataset=ds, select=[col], filters=filters, inherit_context=follow),
+                           prior, schemas, roles, follow)
+
     metrics = _spans(q)
-    group_cols = []
+    group_cols, missing_dims = [], []
     for dname, syns, cands in DIMS:
         pat = "|".join(re.escape(s) for s in syns)
         used_as_filter = any(f.field in cands for f in filters)
@@ -209,6 +247,12 @@ def rule_plan(question: str, schemas: dict, values: dict, roles: dict, prior: Op
             ds, col = _find_col(schemas, cands)
             if col and col not in group_cols:
                 group_cols.append(col)
+            elif not col:
+                missing_dims.append(syns[0])  # asked to break down by something no loaded dataset can supply
+    if missing_dims:
+        return Plan(intent="unanswerable", message=f"I can't break that down by {', '.join(sorted(set(missing_dims)))}: "
+                    f"no loaded dataset has that column, so I won't return an ungrouped total instead. Load the dataset "
+                    f"that carries it. Available fields: {', '.join(sorted(allcols)[:30])}.")
     if "trend" in q and "order_month" in allcols and "order_month" not in group_cols:
         group_cols.append("order_month")
     if re.search(r"\b(compare|versus|vs\.?)\b", q):
@@ -221,13 +265,11 @@ def rule_plan(question: str, schemas: dict, values: dict, roles: dict, prior: Op
             if filters:
                 return _finish(Plan(intent="aggregate", inherit_context=True, filters=filters), prior, schemas, roles, follow)
         vague = desc or asc or re.search(r"\b(performing|performance|popular|good|bad|doing)\b", q)
-        if not vague and re.search(r"\b(distinct|unique|different|list|what are the|which)\b", q) and group_cols:
-            ds, col = _find_col(schemas, [group_cols[0]])
+        # a dimension can be named without a "by ..." trigger ("what categories are there?", "unique segment values")
+        wanted = list(group_cols) + [c for c in _named_dims(q, schemas) if c not in group_cols]
+        if not vague and wanted and DISTINCT_CUE.search(q):
+            ds, col = _find_col(schemas, [wanted[0]])
             return _finish(Plan(intent="distinct", dataset=ds, select=[col], filters=filters, inherit_context=follow), prior, schemas, roles, follow)
-        if re.search(r"\b(describe|summary statistics|summari[sz]e|distribution|statistics|stats)\b", q):
-            nums = [(d, c) for d, cols in schemas.items() for c, k in cols.items() if k == "num" and re.search(rf"\b{re.escape(c.replace('_', ' '))}\b", q)]
-            if nums:
-                return _finish(Plan(intent="describe", dataset=nums[0][0], select=[nums[0][1]], filters=filters, inherit_context=follow), prior, schemas, roles, follow)
         opts = ", ".join(e[0].replace("_", " ") for e in CATALOG if e[2] in roles and e[0] not in ("product_count", "store_count", "customer_count"))
         if vague:
             return Plan(intent="clarify", message=f"By which measure do you mean? For example: {opts}.")

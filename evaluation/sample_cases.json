@@ -23,6 +23,16 @@
     {"id": "edge_messy_latin1_orders_only", "datasets": {"orders": "edge/orders_messy_latin1.csv"},
      "question": "How many orders per month?", "expect": {"status": "ok", "row_count": 4}},
     {"id": "edge_duplicate_key_join_is_rejected", "datasets": {"orders": "edge/orders_messy_latin1.csv", "products": "edge/products_small.csv"},
-     "question": "How many orders per category?", "expect": {"status": "rejected", "contains": ["unsafe join"]}}
+     "question": "How many orders per category?", "expect": {"status": "rejected", "contains": ["unsafe join"]}},
+
+    {"id": "distinct_categories", "question": "what categories are there?",
+     "expect": {"status": "ok", "intent": "distinct", "row_count": 6, "contains": ["6 distinct"]}},
+    {"id": "describe_unit_price", "question": "summary statistics for unit_price",
+     "expect": {"status": "ok", "intent": "describe", "row_count": 1, "contains": ["median 76.95", "max 139.12"]}},
+
+    {"id": "unavailable_grouping_is_refused",
+     "datasets": {"orders": "../data/sample/orders.csv", "inventory": "../data/sample/inventory.csv"},
+     "question": "total revenue by category",
+     "expect": {"status": "unanswerable", "contains": ["no loaded dataset has that column"]}}
   ]
 }

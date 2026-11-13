@@ -108,3 +108,36 @@ def test_header_only_and_garbage_files_do_not_crash_the_run(tmp_path, monkeypatc
     assert ds["extra"]["status"] == "ok_empty" and ds["empty"]["status"] == "failed" and ds["empty"]["error"]["code"] == "empty_file"
     assert ds["orders"]["status"] == "ok"
     assert store.get_run(rid)["status"] == "done" or store.get_run(rid)["status"] == "partial"
+
+
+def test_case_variant_tie_break_prefers_title_case():
+    """A 1-1 tie must not be broken alphabetically: uppercase sorts first and looks sloppy."""
+    raw = _raw("store_id,store_name,region\nS1,Alpha,East\nS2,Beta,EAST\nS3,Gamma,West\nS4,Delta,west \n")
+    r = clean_dataset("stores", raw)["df"].set_index("store_id")["region"]
+    assert r["S1"] == r["S2"] == "East"
+    assert r["S3"] == r["S4"] == "West"
+
+
+def test_category_normalisation_tie_break_prefers_title_case():
+    raw = _raw("sku,product_name,category,price,cost\nA-1,One,Frobnitz,10,5\nA-2,Two,FROBNITZ,12,6\n")
+    df = clean_dataset("products", raw)["df"]
+    assert set(df["category_norm"]) == {"Frobnitz"}
+    # confidence is per row: the canonical spelling is "exact", the variant it replaced is "case_variant"
+    assert dict(zip(df["category"], df["category_norm_confidence"])) == {"Frobnitz": "exact", "FROBNITZ": "case_variant"}
+
+
+def test_all_null_column_is_flagged_kept_and_does_not_corrupt_the_schema():
+    raw = _raw("order_id,sku,qty,revenue,discount\nO1,A-1,1,10,\nO2,A-2,2,20,\n")
+    res = clean_dataset("orders", raw)
+    assert any(i["type"] == "all_null_column" and i["severity"] == "medium" and i["columns"] == ["discount"]
+               for i in res["issues"])
+    assert "discount" in res["df"].columns and len(res["df"]) == 2      # flagged and kept, never silently dropped
+
+
+def test_already_clean_input_is_left_alone_and_stays_idempotent():
+    raw = _raw("order_id,sku,qty,revenue,order_date\nO1,A-1,1,10.5,2025-01-01\nO2,A-2,2,20.0,2025-02-01\n")
+    res = clean_dataset("orders", raw)
+    v = validate_cleaning(len(raw), list(raw.columns), res["header_map"], res["df"], res["steps"],
+                          count_rerun_changes("orders", res["df"], False))
+    assert v["ok"] and v["unexplained_row_delta"] == 0 and v["columns_dropped"] == [] and v["idempotent"]
+    assert len(res["df"]) == 2 and "revenue" in res["df"].columns
